@@ -12,14 +12,19 @@ install:
   - GO111MODULE=on go get github.com/mattn/goveralls
 
 script:
-  - GO111MODULE=on go get -d -t ./...
   - >
     if [ -n "$(gofmt -l .)" ]; then
       echo "Go code is not formatted:"
       gofmt -d .
       exit 1
     fi
-  - GO111MODULE=on go vet ./...
+  
+  - >
+  if [ -n "$(go vet -l .)" ]; then
+    echo "Go code is not formatted:"
+    gofmt -d .
+    exit 1
+  fi
   - GO111MODULE=on golint ./...
   - GO111MODULE=on go test ./...
   - >
