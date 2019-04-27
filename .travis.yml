@@ -19,7 +19,7 @@ script:
     fi
   - >
     cd "$(dirname $0)"
-    DIRS=". assert require mock _codegen"
+    DIRS=". calculation"
     set -e
     for subdir in $DIRS; do
       pushd $subdir
