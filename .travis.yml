@@ -18,13 +18,11 @@ script:
       gofmt -d .
       exit 1
     fi
-  
-  - >
-  if [ -n "$(go vet -l .)" ]; then
-    echo "Go code is not formatted:"
-    gofmt -d .
-    exit 1
-  fi
+    if [ -n "$(go vet -l .)" ]; then
+      echo "Go code is not vet:"
+      go vet -d .
+      exit 1
+    fi
   - GO111MODULE=on golint ./...
   - GO111MODULE=on go test ./...
   - >
