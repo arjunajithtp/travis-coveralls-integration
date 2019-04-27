@@ -18,11 +18,14 @@ script:
       exit 1
     fi
   - >
-    if [ -n "$(go vet -l .)" ]; then
-      echo "Go code is not vet:"
-      go vet -d .
-      exit 1
-    fi
+    cd "$(dirname $0)"
+    DIRS=". assert require mock _codegen"
+    set -e
+    for subdir in $DIRS; do
+      pushd $subdir
+      go vet
+      popd
+    done
   - GO111MODULE=on golint ./...
   - GO111MODULE=on go test ./...
   - >
