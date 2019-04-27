@@ -24,5 +24,6 @@ script:
       goimports -d -e ./ | grep '.*' && { echo; echo "Aborting due to non-empty goimports output."; exit 1; } || :;
     fi
   - go test -v -covermode=count -coverprofile=coverage.out
-  - goveralls -coverprofile gover.coverprofile -service travis-ci
+    $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci
+
 
