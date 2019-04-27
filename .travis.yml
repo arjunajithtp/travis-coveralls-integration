@@ -7,6 +7,9 @@ go:
 before_install:
   - GO111MODULE=on go get -v golang.org/x/lint/golint
 
+install:
+  - GO111MODULE=on go get golang.org/x/tools/cmd/cover
+  - GO111MODULE=on go get github.com/mattn/goveralls
 
 script:
   - GO111MODULE=on go get -d -t ./...
@@ -20,3 +23,7 @@ script:
       go get -u golang.org/x/tools/cmd/goimports;
       goimports -d -e ./ | grep '.*' && { echo; echo "Aborting due to non-empty goimports output."; exit 1; } || :;
     fi
+  - >
+    go test -v -covermode=count -coverprofile=coverage.out
+    $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci
+
