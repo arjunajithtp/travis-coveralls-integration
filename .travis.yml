@@ -20,7 +20,7 @@ script:
   - >
     if [ -n "$(go vet -l .)" ]; then
       echo "Go code is not vet:"
-      go vet -d .
+      go vet ./...
       exit 1
     fi
   - GO111MODULE=on golint ./...
