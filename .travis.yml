@@ -18,14 +18,13 @@ script:
       gofmt -d .
       exit 1
     fi
-  - GO111MODULE=on go vet ./...
-  - retval=$?
   - >
     GO111MODULE=on go vet ./...;
     retval=$?;
     echo $retval;
     if [ $retval -ne 0 ]; then
-        echo "Return code was not zero but $retval"
+        echo "Return code was not zero but $retval";
+        exit $retval;
     fi
   - >
     if [ -n "$(golint ./...)" ]; then
