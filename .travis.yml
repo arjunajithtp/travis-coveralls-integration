@@ -23,6 +23,12 @@ script:
       go vet ./...
       exit 1
     fi
+  - >
+    if [ -n "$(golint -l .)" ]; then
+      echo "Go code is not formatted:"
+      golint -d .
+      exit 1
+    fi
   - GO111MODULE=on golint ./...
   - GO111MODULE=on go test ./...
   - >
