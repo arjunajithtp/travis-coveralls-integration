@@ -18,14 +18,11 @@ script:
       exit 1
     fi
   - >
-    cd "$(dirname $0)"
-    DIRS=". calculation"
-    set -e
-    for subdir in $DIRS; do
-      pushd $subdir
-      go vet
-      popd
-    done
+    if [ -n "$(go vet -l .)" ]; then
+      echo "Go code is not vet:"
+      go vet -d .
+      exit 1
+    fi
   - GO111MODULE=on golint ./...
   - GO111MODULE=on go test ./...
   - >
