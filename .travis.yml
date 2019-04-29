@@ -21,6 +21,7 @@ script:
   - GO111MODULE=on go vet ./...
   - retval=$?
   - >
+    echo $retval
     if [ $? -eq 0 ]; then
       echo "Go code is not vet:"
       GO111MODULE=on go vet ./...
