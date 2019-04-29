@@ -1,22 +1,33 @@
 language: go
 
 go:
-  - 1.11.x
   - 1.12.x
 
 before_install:
   - GO111MODULE=on go get -v golang.org/x/lint/golint
-
-install:
-  - GO111MODULE=on go get github.com/modocache/gover
   - GO111MODULE=on go get github.com/mattn/goveralls
 
 script:
-  - GO111MODULE=on go get -d -t ./...
-  - GO111MODULE=on go fmt ./...
-  - GO111MODULE=on go vet ./...
-  - GO111MODULE=on golint ./...
-  - GO111MODULE=on go test ./...
+  - >
+    if [ -n "$(gofmt -l .)" ]; then
+      echo "Go code is not formatted:"
+      gofmt -d .
+      exit 1
+    fi
+  - >
+    GO111MODULE=on go vet ./...;
+    retval=$?;
+    if [ $retval -ne 0 ]; then
+        echo "There are some go vet errors.";
+        exit 1
+    fi
+  - >
+    if [ -n "$(golint ./...)" ]; then
+      echo "There are some lint errors:"
+      golint ./...
+      exit 1
+    fi
+  - GO111MODULE=on go test -v -race ./...
   - >
     go_version=$(go version);
     if [ ${go_version:13:4} = "1.12" ]; then
@@ -24,6 +35,5 @@ script:
       goimports -d -e ./ | grep '.*' && { echo; echo "Aborting due to non-empty goimports output."; exit 1; } || :;
     fi
 
-  - gover
-  - goveralls -coverprofile gover.coverprofile -service travis-ci
+  - $GOPATH/bin/goveralls -service=travis-ci
 
