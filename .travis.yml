@@ -5,11 +5,7 @@ go:
 
 before_install:
   - GO111MODULE=on go get -v golang.org/x/lint/golint
-
-install:
-  - GO111MODULE=on go get github.com/modocache/gover
   - GO111MODULE=on go get github.com/mattn/goveralls
-  - GO111MODULE=on go get github.com/GeertJohan/fgt
 
 script:
   - >
@@ -39,6 +35,5 @@ script:
       goimports -d -e ./ | grep '.*' && { echo; echo "Aborting due to non-empty goimports output."; exit 1; } || :;
     fi
 
-  - gover
-  - goveralls -coverprofile gover.coverprofile -service travis-ci
+  - $GOPATH/bin/goveralls -service=travis-ci
 
