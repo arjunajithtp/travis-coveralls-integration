@@ -9,6 +9,12 @@ before_install:
 
 script:
   - >
+    go_version=$(go version);
+    if [ ${go_version:13:4} = "1.12" ]; then
+      go get -u golang.org/x/tools/cmd/goimports;
+      goimports -d -e ./ | grep '.*' && { echo; echo "Aborting due to non-empty goimports output."; exit 1; } || :;
+    fi
+  - >
     if [ -n "$(gofmt -l .)" ]; then
       echo "Go code is not formatted:"
       gofmt -d .
@@ -27,12 +33,12 @@ script:
       golint ./...
       exit 1
     fi
-  - GO111MODULE=on go test -v -race ./...
   - >
-    go_version=$(go version);
-    if [ ${go_version:13:4} = "1.12" ]; then
-      go get -u golang.org/x/tools/cmd/goimports;
-      goimports -d -e ./ | grep '.*' && { echo; echo "Aborting due to non-empty goimports output."; exit 1; } || :;
+    GO111MODULE=on go test -v -race ./...;
+    retval=$?;
+    if [ $retval -ne 0 ]; then
+        echo "Some test cases failed.";
+        exit 1
     fi
 
   - $GOPATH/bin/goveralls -service=travis-ci
