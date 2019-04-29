@@ -19,7 +19,7 @@ script:
       exit 1
     fi
   - >
-    if [ $("GO111MODULE=on go vet ./...") -ne 0 ]; then
+    if [ $?("GO111MODULE=on go vet ./...") -ne 0 ]; then
         echo "There are some go vet errors.";
         GO111MODULE=on go vet ./...
         exit 1
