@@ -18,19 +18,18 @@ script:
       exit 1
     fi
   - >
-    if [ -n "$(go vet ./...)" ]; then
+    if [ -n "$(GO111MODULE=on go vet ./...)" ]; then
       echo "Go code is not vet:"
-      go vet ./...
+      GO111MODULE=on go vet ./...
       exit 1
     fi
   - >
     if [ -n "$(golint ./...)" ]; then
-      echo "Go code is not formatted:"
+      echo "There are some lint errors:"
       golint ./...
       exit 1
     fi
-  - GO111MODULE=on golint ./...
-  - GO111MODULE=on go test ./...
+  - GO111MODULE=on go test -v -race ./...
   - >
     go_version=$(go version);
     if [ ${go_version:13:4} = "1.12" ]; then
