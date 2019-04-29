@@ -18,8 +18,7 @@ script:
       exit 1
     fi
   - >
-    if GO111MODULE=on go vet ./...
-    then
+    if GO111MODULE=on go vet ./...; then
       echo "Go code is not vet:"
       GO111MODULE=on go vet ./...
       exit 1
