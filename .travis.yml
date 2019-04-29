@@ -23,7 +23,7 @@ script:
     retval=$?;
     if [ $retval -ne 0 ]; then
         echo "There are some go vet errors.";
-        exit $retval;
+        exit 1
     fi
   - >
     if [ -n "$(golint ./...)" ]; then
