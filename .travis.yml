@@ -18,13 +18,13 @@ script:
       exit 1
     fi
   - >
-    if [ -n "$(go vet -l .)" ]; then
+    if [ -n "$(go vet ./...)" ]; then
       echo "Go code is not vet:"
       go vet ./...
       exit 1
     fi
   - >
-    if [ -n "$(golint -l .)" ]; then
+    if [ -n "$(golint ./...)" ]; then
       echo "Go code is not formatted:"
       golint -d .
       exit 1
